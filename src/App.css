@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Dancing+Script:wght@400..700&family=New+Rocker&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -6,25 +7,13 @@
 }
 
 body {
+  justify-content: center;
   background-color: black;
-  font-family: 'Poppins', sans-serif;
-}
-
-.page {
-  color: white;
-  padding: 100px 20px;
-  text-align: center;
-}
-
-.status {
-  color: white;
-  text-align: center;
-  font-size: 1.2rem;
-  margin: 20px;
+  font-family: "Poppins", sans-serif;
 }
 
 header {
-  width: 100%;
+  width: 1200px;
   padding: 12px 20px;
   display: flex;
   align-items: center;
@@ -59,7 +48,8 @@ nav ul {
   align-items: center;
 }
 
-nav ul li a, nav ul li span {
+nav ul li a,
+nav ul li span {
   font-weight: 600;
   text-decoration: none;
   text-transform: capitalize;
@@ -68,12 +58,23 @@ nav ul li a, nav ul li span {
   cursor: pointer;
 }
 
+#genre-toggle {
+  position: relative;
+  cursor: pointer;
+  display: block;
+  width: 70px;
+}
 .search-box {
   position: relative;
   margin-right: 20px;
 }
-
-.fa-arrow-right {
+.fa-caret-down {
+  position: absolute;
+  right: 0;
+  top: 20%;
+}
+.fa-arrow-right,
+.arrow {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -81,6 +82,7 @@ nav ul li a, nav ul li span {
   color: rgb(207, 197, 197);
   cursor: pointer;
   font-size: 16px;
+  transition: 0.3s;
 }
 
 .fa-arrow-right:hover {
@@ -117,14 +119,8 @@ nav ul li a, nav ul li span {
   border-radius: 5px;
 }
 
-/* Genre Dropdown */
 .relative {
   position: relative;
-}
-
-#genre-toggle:hover + .genre-dropdown,
-.genre-dropdown:hover {
-  display: block;
 }
 
 .genre-dropdown {
@@ -136,6 +132,11 @@ nav ul li a, nav ul li span {
   border-radius: 8px;
   padding: 10px;
   z-index: 1001;
+  flex-direction: column; /* Ensure vertical layout */
+}
+
+.genre-dropdown.block {
+  display: flex; /* Show when active */
 }
 
 .genre-dropdown a {
@@ -147,7 +148,7 @@ nav ul li a, nav ul li span {
 }
 
 .genre-dropdown a:hover {
-  background-color: red;
+  color: gainsboro;
 }
 
 .video-container {
@@ -177,7 +178,7 @@ video {
 }
 
 .preview-text {
-  font-family: 'new rocker';
+  font-family: "New Rocker";
   font-size: 1.8rem;
   text-transform: capitalize;
   margin-bottom: 20px;
@@ -205,12 +206,11 @@ video {
 h1 {
   background-color: black;
   color: aliceblue;
-  font-family: 'new rocker';
   padding: 20px 12px;
   text-transform: capitalize;
+  font-family: "New Rocker";
 }
 
-/* Movie section */
 .movie-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -232,6 +232,7 @@ h1 {
   cursor: pointer;
   border-radius: 10px;
   overflow: hidden;
+  background-color: bisque;
 }
 
 .card {
@@ -307,7 +308,7 @@ footer {
 }
 
 .end-info {
-  width: 390px;
+  width: 370px;
   flex-grow: 1;
   color: aliceblue;
 }
@@ -353,6 +354,7 @@ footer {
   font-weight: 600;
   color: aliceblue;
   font-size: 14px;
+  transition: 0.3s ease-in;
 }
 
 .social-info a:hover {
@@ -367,7 +369,7 @@ footer {
 .last-last-info {
   border: 1px solid red;
   width: 95%;
-  height: 60px;
+  height: auto;
   position: relative;
   padding: 8px;
 }
@@ -375,12 +377,35 @@ footer {
 .last-last-info::after {
   position: absolute;
   content: "";
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background-color: orangered;
-  top: 0;
-  right: 0;
+  top: 0px;
+  right: 0px;
   border-radius: 50%;
+}
+
+p.error {
+  color: red;
+  text-align: center;
+  padding: 20px;
+}
+@media (max-width: 1024px) {
+  header {
+    width: 100%;
+  }
+  ul {
+    justify-content: center;
+  }
+  .end-info {
+    width: 290px;
+  }
+  .tobihub-info {
+    font-size: 11px;
+  }
+  .social-info a {
+    font-size: 10px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -408,10 +433,6 @@ footer {
     display: flex;
   }
 
-  .search-box {
-    display: none;
-  }
-
   .preview-section {
     padding: 0 20px;
     font-size: 1.4rem;
@@ -425,35 +446,49 @@ footer {
     font-size: 1rem;
     padding: 8px 16px;
   }
+  .end-info {
+    width: 222px;
+  }
+  .tobihub-info {
+    font-size: 10px;
+  }
+  .social-info a {
+    font-size: 5px;
+  }
 }
-
+@media (max-width: 425px) {
+  .preview-section {
+    height: 100vh;
+  }
+  .social-info a {
+    font-size: 11px;
+  }
+  .preview-text {
+    margin-bottom: 0;
+  }
+  .movie-section {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 2fr));
+    padding: 8px 16px 0 8px;
+  }
+  .movie-card {
+    width: 198px;
+  }
+}
 @media (max-width: 375px) {
   .movie-section {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 2fr));
+    padding: 8px 25px 0 8px;
   }
-
   .movie-card {
-    width: 180px;
-    height: 320px;
-  }
-
-  .preview-section {
-    height: 60vh;
-  }
-
-  video {
-    object-fit: fill;
+    width: 178px;
   }
 }
-
-@media (max-width: 425px) {
-  .movie-card {
-    width: 200px;
+@media (max-width: 320px) {
+    .movie-section {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: 8px 5px 0 8px;
   }
-
-  .preview-section {
-    height: 80vh;
+  .movie-card {
+    width: 300px;
   }
 }
