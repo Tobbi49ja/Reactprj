@@ -1,37 +1,41 @@
-const express = require('express');
-   const cors = require('cors');
-   const path = require('path');
-   const dotenv = require('dotenv');
-   const axios = require('axios');
-   const apiRouter = require('./routes/api');
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const dotenv = require("dotenv");
+const axios = require("axios");
+const apiRouter = require("./Routes/api");
 
-   dotenv.config();
-   const app = express();
+dotenv.config();
+const app = express();
 
-   app.use(cors());
-   app.use(express.json());
-   app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
 
-   // API routes
-   app.use('/api', apiRouter);
+// API routes
+app.use("/api", apiRouter);
 
-   // External HTML search page
-   app.get('/search', async (req, res) => {
-     try {
-       const { query } = req.query;
-       let movies = [];
-       let error = '';
+// External HTML search page
+app.get("/search", async (req, res) => {
+  try {
+    const { query } = req.query;
+    let movies = [];
+    let error = "";
 
-       if (query) {
-         const response = await axios.get(`http://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=${process.env.OMDB_API_KEY}`);
-         if (response.data.Search) {
-           movies = response.data.Search;
-         } else {
-           error = response.data.Error || 'No movies found';
-         }
-       }
+    if (query) {
+      const response = await axios.get(
+        `http://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=${
+          process.env.OMDB_API_KEY
+        }`
+      );
+      if (response.data.Search) {
+        movies = response.data.Search;
+      } else {
+        error = response.data.Error || "No movies found";
+      }
+    }
 
-       res.send(`
+    res.send(`
          <!DOCTYPE html>
          <html lang="en">
          <head>
@@ -48,18 +52,24 @@ const express = require('express');
            </header>
            <main>
              <form action="/search" method="GET" class="search-box">
-               <input class="input-search" type="text" name="query" value="${query || ''}" placeholder="Search movies...">
+               <input class="input-search" type="text" name="query" value="${
+                 query || ""
+               }" placeholder="Search movies...">
                <button type="submit">Search</button>
              </form>
              <h1>Search Results</h1>
-             ${error ? `<p class="error">${error}</p>` : ''}
+             ${error ? `<p class="error">${error}</p>` : ""}
              <section class="movie-section">
                ${movies
                  .map(
                    (movie) => `
                      <div class="movie-card" key="${movie.imdbID}">
                        <div class="img-card">
-                         ${movie.Poster !== 'N/A' ? `<img class="card" src="${movie.Poster}" alt="${movie.Title}">` : '<p>No poster available</p>'}
+                         ${
+                           movie.Poster !== "N/A"
+                             ? `<img class="card" src="${movie.Poster}" alt="${movie.Title}">`
+                             : "<p>No poster available</p>"
+                         }
                        </div>
                        <div class="title-info">
                          <p class="movie-title">${movie.Title}</p>
@@ -69,14 +79,14 @@ const express = require('express');
                      </div>
                    `
                  )
-                 .join('')}
+                 .join("")}
              </section>
            </main>
          </body>
          </html>
        `);
-     } catch (error) {
-       res.status(500).send(`
+  } catch (error) {
+    res.status(500).send(`
          <!DOCTYPE html>
          <html lang="en">
          <head>
@@ -92,16 +102,30 @@ const express = require('express');
          </body>
          </html>
        `);
-     }
-   });
+  }
+});
 
-   // Serve React app for other routes
-   app.use(express.static(path.join(__dirname, '../build')));
-   app.get('*', (req, res) => {
-     res.sendFile(path.join(__dirname, '../build', 'index.html'));
-   });
+// Serve React app for other routes
+app.use(express.static(path.join(__dirname, "../build")));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
+});
 
-   const PORT = process.env.PORT || 3001;
-   app.listen(PORT, () => {
-     console.log(`Server running at http://localhost:${PORT}`);
-   });
+
+// Debug routes
+console.log('Registered routes:');
+if (app._router && app._router.stack) {
+  app._router.stack.forEach((layer) => {
+    if (layer.route) {
+      console.log('Route:', layer.route.path);
+    } else if (layer.name === 'router' && layer.regexp) {
+      console.log('Router:', layer.regexp);
+    }
+  });
+} else {
+  console.log('No router stack available');
+}
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
